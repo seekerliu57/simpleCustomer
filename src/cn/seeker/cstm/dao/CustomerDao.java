@@ -1,9 +1,11 @@
 package cn.seeker.cstm.dao;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 import cn.itcast.jdbc.TxQueryRunner;
@@ -49,5 +51,74 @@ public class CustomerDao {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
+	}
+	/**
+	 * 通过cid查询
+	 * @param cid
+	 */
+	public  Customer findByCid(String cid) {
+		
+		try {
+			String sql = "select * from t_customer where cid =?";
+			return qr.query(sql, new BeanHandler<Customer>(Customer.class),cid);
+			
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	public void edit(Customer c) {
+		try {
+			String sql = "update t_customer set cname=?,gender=?," +
+					"birthday=?,cellphone=?,email=?,description=?" +
+					" where cid=?";
+			Object [] params = {c.getCname(),c.getGender(),
+					c.getBirthday(),c.getCellphone(),c.getEmail(),
+					c.getDescription(),c.getCid()};
+			qr.update(sql,params);
+			
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	public void delete(String cid) {
+		try {
+			String sql = "delete from t_customer where cid =?";
+			qr.update(sql,cid);
+			
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	public List<Customer> query(Customer c) {
+
+		try {
+			StringBuilder sql = new StringBuilder("select * from t_customer where 1=1");
+			
+			ArrayList<String> params = new ArrayList<String>();
+			
+			if(c.getCname() != null && !c.getCname().trim().isEmpty()){
+				sql.append(" and cname like ?");
+				params.add("%"+c.getCname()+"%");
+			}
+			if(c.getGender() != null && !c.getGender().trim().isEmpty()){
+				sql.append(" and gender like ?");
+				params.add("%"+c.getGender()+"%");
+			}
+			if(c.getCellphone() != null && !c.getCellphone().trim().isEmpty()){
+				sql.append(" and cellphone like ?");
+				params.add("%"+c.getCellphone()+"%");
+			}
+			if(c.getEmail() != null && !c.getEmail().trim().isEmpty()){
+				sql.append(" and email like ?");
+				params.add("%"+c.getEmail()+"%");
+			}
+			
+			return qr.query(sql.toString(), new BeanListHandler<Customer>(Customer.class),params.toArray());
+			
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+		
 	}
 }

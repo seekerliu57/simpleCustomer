@@ -87,7 +87,7 @@ public class Customer {
 	@Override
 	public String toString() {
 		return "Castomer [cid=" + cid + ", cname=" + cname + ", gender="
-				+ gender + ", brithday=" + birthday + ", cellphone="
+				+ gender + ", birthday=" + birthday + ", cellphone="
 				+ cellphone + ", email=" + email + ", description="
 				+ description + "]";
 	}

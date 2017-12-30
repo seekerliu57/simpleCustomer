@@ -21,4 +21,21 @@ public class CustomerService {
 	public List<Customer> findAll(){
 		return customerDao.findAll();
 	}
+	/**
+	 * 通过cid查询
+	 * @param cid
+	 */
+	public  Customer findByCid(String cid) {
+		return customerDao.findByCid(cid);
+	}
+	public void edit(Customer c) {
+		customerDao.edit(c);
+	}
+	public void delete(String cid) {
+		customerDao.delete(cid);
+	}
+	public List<Customer> query(Customer c) {
+
+		return customerDao.query(c);
+	}
 }
